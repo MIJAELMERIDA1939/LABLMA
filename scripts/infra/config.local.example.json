@@ -1,0 +1,9 @@
+{
+  "_note": "Copia este archivo como config.local.json y sobreescribe los valores",
+  "domain": "lablma.com",
+  "cloudflare": {
+    "email": "tu-email@ejemplo.com"
+  },
+  "git_remote": "https://github.com/tu-usuario/sgc.git",
+  "webhook_secret": "genera-un-secreto-aleatorio-aqui"
+}

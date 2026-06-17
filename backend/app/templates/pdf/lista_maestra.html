@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="header">
+  <h1>Lista Maestra de Documentos</h1>
+  <div class="meta">Generado el {{ fecha_generacion }}</div>
+</div>
+
+<table>
+  <tr>
+    <th>Código</th>
+    <th>Título</th>
+    <th>Tipo</th>
+    <th>Versión</th>
+    <th>Estado</th>
+    <th>Fecha Vigencia</th>
+  </tr>
+  {% for doc in documentos %}
+  <tr>
+    <td>{{ doc.codigo }}</td>
+    <td>{{ doc.titulo }}</td>
+    <td>{{ doc.tipo }}</td>
+    <td>{{ doc.version_actual }}</td>
+    <td>{{ doc.estado }}</td>
+    <td>{{ doc.fecha_vigencia or '—' }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+<div class="footer">
+  Generado el {{ fecha_generacion }} por SGC - Sistema de Gestión de Calidad<br>
+  Total documentos: {{ documentos | length }}
+</div>
+{% endblock %}

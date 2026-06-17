@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="header">
+  <h1>Reporte de No Conformidad</h1>
+  <div class="meta">
+    Código: <strong>{{ nc.codigo }}</strong> |
+    Tipo: <strong>{{ nc.tipo }}</strong> |
+    Clasificación: <strong>{{ nc.clasificacion }}</strong> |
+    Estado: <strong>{{ nc.estado }}</strong>
+  </div>
+</div>
+
+<h3>Información General</h3>
+<table>
+  <tr><td style="width:30%"><strong>Fuente</strong></td><td>{{ nc.fuente or '—' }}</td></tr>
+  <tr><td><strong>Fecha de detección</strong></td><td>{{ nc.fecha_deteccion }}</td></tr>
+  <tr><td><strong>Área afectada</strong></td><td>{{ nc.area_afectada or '—' }}</td></tr>
+  <tr><td><strong>Fecha límite</strong></td><td>{{ nc.fecha_limite }}</td></tr>
+  <tr><td><strong>Fecha de cierre</strong></td><td>{{ nc.fecha_cierre or '—' }}</td></tr>
+  <tr><td><strong>Eficaz</strong></td><td>{{ 'Sí' if nc.eficaz else 'No' if nc.eficaz is not none else 'Pendiente' }}</td></tr>
+</table>
+
+<h3>Descripción</h3>
+<p>{{ nc.descripcion }}</p>
+
+{% if nc.analisis_causa %}
+<h3>Análisis de Causa</h3>
+<p>{{ nc.analisis_causa }}</p>
+{% endif %}
+
+{% if nc.correccion %}
+<h3>Corrección</h3>
+<p>{{ nc.correccion }}</p>
+{% endif %}
+
+{% if planes %}
+<h3>Plan de Acción</h3>
+<table>
+  <tr>
+    <th>Actividad</th>
+    <th>Responsable</th>
+    <th>Fecha inicio</th>
+    <th>Fecha fin</th>
+    <th>Estado</th>
+  </tr>
+  {% for plan in planes %}
+  <tr>
+    <td>{{ plan.actividad }}</td>
+    <td>{{ plan.responsable_id or '—' }}</td>
+    <td>{{ plan.fecha_inicio or '—' }}</td>
+    <td>{{ plan.fecha_fin or '—' }}</td>
+    <td>{{ plan.estado }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<div class="footer">
+  Generado el {{ fecha_generacion }} por SGC - Sistema de Gestión de Calidad
+</div>
+{% endblock %}

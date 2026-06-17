@@ -1,0 +1,43 @@
+# SGC Backend - Python FastAPI
+# Production-ready dependencies with exact versions
+
+# Web framework
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+
+# Database
+sqlalchemy[asyncio]==2.0.30
+asyncpg==0.29.0
+aiosqlite==0.20.0
+alembic==1.13.1
+
+# Auth
+python-jose[cryptography]==3.3.0
+bcrypt==4.1.3
+passlib[bcrypt]==1.7.4
+
+# Settings
+pydantic==2.7.1
+pydantic-settings==2.3.0
+pydantic-extra-types==2.7.0
+
+# Email
+fastapi-mail==1.4.1
+
+# PDF generation
+weasyprint==62.2
+jinja2==3.1.4
+
+# HTTP client (WhatsApp API)
+httpx==0.27.0
+
+# Scheduler
+apscheduler==3.10.4
+
+# CORS
+# (built into FastAPI)
+
+# Utils
+python-dateutil==2.9.0
+python-dotenv==1.0.1

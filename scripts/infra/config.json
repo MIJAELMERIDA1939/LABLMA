@@ -1,0 +1,21 @@
+{
+  "domain": "lablma.com",
+  "backend_port": 8000,
+  "frontend_port": 3000,
+  "webhook_port": 9000,
+  "git_branch": "main",
+  "poll_interval_seconds": 60,
+  "monitor_interval_seconds": 30,
+  "max_restarts": 3,
+  "cloudflare": {
+    "email": "mijaelmeridaalvarado@gmail.com",
+    "tunnel_name": "sgc"
+  },
+  "paths": {
+    "backend_env": "backend/.env",
+    "frontend_env": "frontend/.env.local",
+    "infra_env": "scripts/infra/.env",
+    "data_dir": "data",
+    "log_dir": "logs"
+  }
+}

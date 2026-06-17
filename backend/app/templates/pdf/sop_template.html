@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: A4;
+    margin: 2cm 2.5cm 2.5cm 2.5cm;
+    @bottom-center {
+      content: "Página " counter(page) " de " counter(pages);
+      font-size: 9px;
+      color: #333;
+      font-family: 'Times New Roman', Times, serif;
+    }
+  }
+  @page cover {
+    margin: 2cm 2.5cm 2.5cm 2.5cm;
+    @bottom-center { content: none; }
+  }
+  @page content {
+    margin: 0.5cm 2.5cm 2.5cm 2.5cm;
+  }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #000;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* PORTADA */
+  .cover {
+    page: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    text-align: center;
+  }
+  .cover-header {
+    margin-top: 60px;
+    font-size: 16pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .cover-logo {
+    margin: 40px auto;
+    text-align: center;
+  }
+  .cover-logo img {
+    max-height: 120px;
+  }
+  .cover-logo-text {
+    font-size: 10pt;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-top: 10px;
+  }
+  .cover-type-banner {
+    background: #000;
+    color: #fff;
+    font-size: 13pt;
+    font-weight: bold;
+    padding: 8px 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 30px auto;
+    width: 80%;
+  }
+  .cover-subtitle {
+    border: 2px solid #000;
+    padding: 15px 30px;
+    font-size: 14pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 30px auto;
+    display: inline-block;
+  }
+  .cover-meta {
+    margin: 30px auto;
+    text-align: left;
+    width: 60%;
+  }
+  .cover-meta-row {
+    display: flex;
+    margin: 5px 0;
+    font-size: 11pt;
+  }
+  .cover-meta-label {
+    font-weight: bold;
+    width: 200px;
+  }
+  .cover-meta-value {
+    flex: 1;
+  }
+
+  /* TABLA DE FIRMAS */
+  .firma-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    font-size: 9pt;
+  }
+  .firma-table td, .firma-table th {
+    border: 1px solid #000;
+    padding: 4px 8px;
+    text-align: center;
+  }
+  .firma-table th {
+    background: #f0f0f0;
+    font-weight: bold;
+  }
+  .firma-table .firma-cell {
+    height: 40px;
+    vertical-align: top;
+  }
+
+  /* FOOTER */
+  .page-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 8pt;
+    text-align: center;
+    color: #333;
+    padding: 5px;
+    border-top: 1px solid #ccc;
+  }
+
+  /* CONTENIDO INTERIOR */
+  .content-page {
+    page: content;
+  }
+
+  /* HEADER INTERIOR */
+  .doc-header {
+    display: flex;
+    border: 2px solid #000;
+    margin-bottom: 20px;
+    font-size: 9pt;
+  }
+  .doc-header-logo {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    border-right: 2px solid #000;
+  }
+  .doc-header-logo img {
+    max-height: 50px;
+  }
+  .doc-header-info {
+    flex: 1;
+    padding: 8px 12px;
+  }
+  .doc-header-info .proc-title {
+    font-size: 10pt;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .doc-header-info .proc-subtitle {
+    font-size: 10pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 5px;
+  }
+  .doc-header-meta {
+    border-left: 2px solid #000;
+    padding: 8px 12px;
+    font-size: 8pt;
+  }
+  .doc-header-meta table {
+    border-collapse: collapse;
+  }
+  .doc-header-meta td {
+    padding: 2px 8px;
+    border: none;
+  }
+  .doc-header-meta td:first-child {
+    font-weight: bold;
+    text-align: right;
+  }
+
+  /* SECCIONES */
+  h1 {
+    font-size: 14pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 20px 0 10px 0;
+  }
+  h2 {
+    font-size: 12pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 15px 0 8px 0;
+  }
+  h3 {
+    font-size: 11pt;
+    font-weight: bold;
+    margin: 10px 0 5px 0;
+  }
+
+  .section-title {
+    background: #000;
+    color: #fff;
+    padding: 4px 12px;
+    font-weight: bold;
+    font-size: 11pt;
+    text-transform: uppercase;
+    margin: 15px 0 10px 0;
+  }
+  .subsection-title {
+    background: #e0e0e0;
+    padding: 4px 12px;
+    font-weight: bold;
+    font-size: 11pt;
+    text-transform: uppercase;
+    margin: 12px 0 8px 0;
+  }
+
+  /* TABLAS */
+  table.content-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 10pt;
+  }
+  table.content-table th,
+  table.content-table td {
+    border: 1px solid #000;
+    padding: 5px 8px;
+    text-align: left;
+  }
+  table.content-table th {
+    background: #f0f0f0;
+    font-weight: bold;
+  }
+
+  /* LISTAS */
+  ul, ol {
+    margin: 5px 0 5px 20px;
+    padding-left: 15px;
+  }
+  li {
+    margin: 3px 0;
+  }
+
+  /* TOC */
+  .toc-item {
+    display: flex;
+    margin: 3px 0;
+    font-size: 11pt;
+  }
+  .toc-number {
+    font-weight: bold;
+    width: 30px;
+  }
+  .toc-title {
+    flex: 1;
+  }
+  .toc-dots {
+    flex: 1;
+    border-bottom: 1px dotted #000;
+    margin: 0 5px;
+    position: relative;
+    top: -3px;
+  }
+  .toc-page {
+    width: 30px;
+    text-align: right;
+  }
+  .toc-sub {
+    padding-left: 30px;
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="cover-header">UNIVERSIDAD AUTÓNOMA GABRIEL RENÉ MORENO</div>
+
+  <div class="cover-logo">
+    {% if logo_url %}
+    <img src="{{ logo_url }}" alt="Logo LMA">
+    {% else %}
+    <div style="font-size: 28pt; font-weight: bold; letter-spacing: 3px;">LMA</div>
+    {% endif %}
+    <div class="cover-logo-text">LAB. DE MEDIO AMBIENTE</div>
+  </div>
+
+  <div class="cover-type-banner">{{ tipo_documento }}</div>
+
+  <div style="text-align: center; margin: 30px 0;">
+    <div class="cover-subtitle">{{ doc.titulo }}</div>
+  </div>
+
+  <div class="cover-meta">
+    <div class="cover-meta-row">
+      <div class="cover-meta-label">Código:</div>
+      <div class="cover-meta-value">{{ doc.codigo }}</div>
+    </div>
+    <div class="cover-meta-row">
+      <div class="cover-meta-label">Versión:</div>
+      <div class="cover-meta-value">{{ '%02d' | format(version.numero_version) }}</div>
+    </div>
+    <div class="cover-meta-row">
+      <div class="cover-meta-label">Fecha de emisión:</div>
+      <div class="cover-meta-value">{{ fecha_emision }}</div>
+    </div>
+    <div class="cover-meta-row">
+      <div class="cover-meta-label">Responsable de Emisión:</div>
+      <div class="cover-meta-value">{{ responsable_emision }}</div>
+    </div>
+  </div>
+
+  <table class="firma-table" style="margin-top: 60px;">
+    <tr>
+      <th>Elaborado</th>
+      <th>Revisado</th>
+      <th>Aprobado</th>
+    </tr>
+    <tr>
+      <td><strong>{{ elaborado.nombre }}</strong></td>
+      <td><strong>{{ revisado.nombre }}</strong></td>
+      <td><strong>{{ aprobado.nombre }}</strong></td>
+    </tr>
+    <tr>
+      <td>Cargo<br>{{ elaborado.cargo }}</td>
+      <td>Cargo<br>{{ revisado.cargo }}</td>
+      <td>Cargo<br>{{ aprobado.cargo }}</td>
+    </tr>
+    <tr>
+      <td>Fecha<br>{{ elaborado.fecha }}</td>
+      <td>Fecha<br>{{ revisado.fecha }}</td>
+      <td>Fecha<br>{{ aprobado.fecha }}</td>
+    </tr>
+  </table>
+
+  <div style="text-align: center; margin-top: 30px; font-size: 9pt;">
+    © LMA, Santa Cruz de la Sierra, Bolivia
+  </div>
+</div>
+
+<!-- CONTENIDO -->
+<div class="content-page">
+
+  <!-- HEADER EN CADA PÁGINA -->
+  <div class="doc-header">
+    <div class="doc-header-logo">
+      {% if logo_url %}
+      <img src="{{ logo_url }}" alt="Logo LMA">
+      {% else %}
+      <div style="font-size: 14pt; font-weight: bold;">LMA</div>
+      {% endif %}
+      <div style="font-size: 7pt; text-align: center; margin-top: 3px;">LAB. DE MEDIO AMBIENTE</div>
+    </div>
+    <div class="doc-header-info">
+      <div class="proc-title">{{ tipo_documento }}</div>
+      <div class="proc-subtitle">{{ doc.titulo }}</div>
+    </div>
+    <div class="doc-header-meta">
+      <table>
+        <tr><td>Fecha:</td><td>{{ fecha_emision }}</td></tr>
+        <tr><td>Código:</td><td>{{ doc.codigo }}</td></tr>
+        <tr><td>Versión:</td><td>{{ '%02d' | format(version.numero_version) }}</td></tr>
+        <tr><td>Página:</td><td>{{ page_num }} de {{ total_pages }}</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- CONTENIDO DEL DOCUMENTO -->
+  <div class="document-content">
+    {{ version.contenido_html | safe }}
+  </div>
+
+  <!-- PIE DE PÁGINA - COPIA CONTROLADA -->
+  <div class="page-footer" style="margin-top: 30px; border-top: 1px solid #000; padding-top: 8px;">
+    Este documento sin el sello de "COPIA CONTROLADA" de color azul se constituye en "COPIA NO CONTROLADA"<br>
+    para lo cual puede consultar al Laboratorio de Medio Ambiente (LMA) sobre la vigencia del mismo
+  </div>
+
+</div>
+
+</body>
+</html>

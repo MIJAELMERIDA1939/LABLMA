@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="header">
+  {% if logo_url %}<img src="{{ logo_url }}" alt="Logo">{% endif %}
+  <h1>{{ doc.titulo }}</h1>
+  <div class="meta">
+    Código: <strong>{{ doc.codigo }}</strong> |
+    Versión: <strong>{{ version.numero_version }}</strong> |
+    Tipo: <strong>{{ doc.tipo }}</strong> |
+    Estado: <strong>{{ doc.estado }}</strong>
+  </div>
+  <div class="meta">
+    Elaboración: {{ doc.fecha_elaboracion or '—' }} |
+    Vigencia: {{ doc.fecha_vigencia or '—' }}
+  </div>
+</div>
+
+<div style="margin: 20px 0;">
+  {{ version.contenido_html | safe }}
+</div>
+
+<table class="firma-table">
+  <tr>
+    <th style="width:33%">Elaboró</th>
+    <th style="width:33%">Verificó</th>
+    <th style="width:33%">Aprobó</th>
+  </tr>
+  <tr>
+    <td>{{ doc.elaborado_por_nombre or '—' }}</td>
+    <td>{{ doc.verificado_por_nombre or '—' }}</td>
+    <td>{{ doc.aprobado_por_nombre or '—' }}</td>
+  </tr>
+  <tr>
+    <td><em>Cargo / Fecha: {{ doc.fecha_elaboracion or '—' }}</em></td>
+    <td><em>Cargo / Fecha: {{ doc.fecha_vigencia or '—' }}</em></td>
+    <td><em>Cargo / Fecha: {{ doc.fecha_vigencia or '—' }}</em></td>
+  </tr>
+</table>
+
+<div class="footer">
+  Generado el {{ fecha_generacion }} por SGC - Sistema de Gestión de Calidad
+</div>
+{% endblock %}
