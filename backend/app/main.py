@@ -18,6 +18,7 @@ from app.routers import (
     planes_router,
     dashboard_router,
     notificaciones_router,
+    edicion_router,
 )
 from app.auth.router import router as auth_router
 from app.services.scheduler_service import iniciar_scheduler, detener_scheduler, ejecutar_tareas
@@ -61,6 +62,7 @@ app.include_router(riesgos_router, prefix=API_PREFIX)
 app.include_router(planes_router, prefix=API_PREFIX)
 app.include_router(dashboard_router, prefix=API_PREFIX)
 app.include_router(notificaciones_router, prefix=API_PREFIX)
+app.include_router(edicion_router, prefix=API_PREFIX)
 
 
 @app.get("/")

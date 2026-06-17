@@ -11,11 +11,13 @@ import {
   Users,
   Settings,
   ChevronLeft,
+  PenSquare,
 } from "lucide-react"
 import { useState } from "react"
 
 const menuItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/edicion", label: "Edición", icon: PenSquare },
   { href: "/documentos", label: "Documentos", icon: FileText },
   { href: "/no-conformidades", label: "No Conformidades", icon: AlertTriangle },
   { href: "/riesgos", label: "Riesgos", icon: ShieldAlert },

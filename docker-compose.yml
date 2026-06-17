@@ -32,8 +32,11 @@ services:
         condition: service_healthy
     ports:
       - "8000:8000"
+    volumes:
+      - documentos_edicion:/app/data/documentos_edicion
     command: >
       sh -c "
+        mkdir -p /app/data/documentos_edicion &&
         alembic upgrade head &&
         python -m app.seed &&
         uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
@@ -52,3 +55,4 @@ services:
 
 volumes:
   pgdata:
+  documentos_edicion:

@@ -1,28 +1,35 @@
 param(
-    [ValidateSet("dev", "prod", "status", "stop", "backup", "infra", "network", "tunnel")]
+    [ValidateSet("dev", "prod", "status", "stop", "backup", "infra", "network", "tunnel", "boot")]
     [string]$Mode = "dev"
 )
 
 $root = Split-Path -Parent $PSCommandPath
 
 switch ($Mode) {
+    "boot" {
+        & "$root\boot.ps1"
+    }
     "dev" {
         Write-Host "=== SGC - Development Mode ===" -ForegroundColor Cyan
-        Write-Host "Starting backend + frontend with hot-reload..." -ForegroundColor Yellow
+
+        $lanIPs = Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -like '192.168.*' -or $_.IPAddress -like '10.*' } | Select-Object -ExpandProperty IPAddress
 
         $backendJob = Start-Job -ScriptBlock {
             Set-Location "$using:root\backend"
-            .\venv\Scripts\activate; alembic upgrade head; python -m app.seed; uvicorn app.main:app --reload --port 8000
+            .\venv\Scripts\activate; alembic upgrade head; python -m app.seed; uvicorn app.main:app --host 0.0.0.0 --reload --port 8000
         }
 
         $frontendJob = Start-Job -ScriptBlock {
             Set-Location "$using:root\frontend"
-            npm run dev
+            npm run dev -- --host 0.0.0.0
         }
 
         Write-Host "Backend: http://localhost:8000" -ForegroundColor Green
         Write-Host "Frontend: http://localhost:3000" -ForegroundColor Green
         Write-Host "API Docs: http://localhost:8000/docs" -ForegroundColor Green
+        foreach ($ip in $lanIPs) {
+            Write-Host "LAN:     http://${ip}:3000" -ForegroundColor Green
+        }
         Write-Host ""
         Write-Host "Press Ctrl+C to stop both services" -ForegroundColor Red
 

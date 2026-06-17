@@ -15,6 +15,10 @@ data/
 logs/
 backup/
 
+# Edicion documents (user-created content)
+documentos_edicion/
+backend/documentos_edicion/
+
 # Environment
 backend/.env
 frontend/.env.local

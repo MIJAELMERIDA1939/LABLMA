@@ -2,7 +2,7 @@
 auth/dependencies.py
 Responsabilidad: Dependencias FastAPI para autenticación y autorización.
 Dependencias: fastapi, jose, database.py, auth/service.py
-Exportaciones: get_current_user, require_role
+Exportaciones: get_current_user, require_role, require_permiso
 """
 
 from fastapi import Depends, HTTPException, status
@@ -12,6 +12,7 @@ from sqlalchemy import select
 from app.database import get_db
 from app.auth.service import decode_token
 from app.models.usuario import Usuario
+from app.utils.permisos import tiene_permiso
 
 security = HTTPBearer()
 
@@ -41,3 +42,14 @@ def require_role(*roles: str):
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="No tienes permisos para esta acción")
         return current_user
     return role_checker
+
+
+def require_permiso(permiso: str):
+    async def permiso_checker(current_user: Usuario = Depends(get_current_user)) -> Usuario:
+        if not tiene_permiso(current_user.rol, permiso):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=f"Tu rol '{current_user.rol}' no tiene permiso para '{permiso}'",
+            )
+        return current_user
+    return permiso_checker
