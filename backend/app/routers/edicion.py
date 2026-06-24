@@ -42,7 +42,7 @@ def _guardar_metadatos(data: list[dict]):
     METADATA_FILE.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
-@router.get("/")
+@router.get("")
 async def listar_documentos(
     current_user: Usuario = Depends(require_permiso("edicion_ver")),
 ):

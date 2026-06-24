@@ -30,7 +30,7 @@ class NCPaginatedResponse(BaseModel):
 router = APIRouter(prefix="/nc", tags=["no_conformidades"])
 
 
-@router.get("/", response_model=NCPaginatedResponse)
+@router.get("", response_model=NCPaginatedResponse)
 async def list_nc(
     tipo: str = None,
     estado: str = None,
@@ -70,7 +70,7 @@ async def list_nc(
     return NCPaginatedResponse(items=ncs, total=total, limit=limit, offset=offset)
 
 
-@router.post("/", response_model=NCOut, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=NCOut, status_code=status.HTTP_201_CREATED)
 async def create_nc(
     body: NCCreate,
     db: AsyncSession = Depends(get_db),

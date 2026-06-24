@@ -44,7 +44,7 @@ Write-Log "Backend iniciado"
 Write-Log "Iniciando frontend (puerto 3000)..."
 $feLog = "$logDir\frontend.log"
 $feErr = "$logDir\frontend-err.log"
-Start-Process -PassThru -FilePath "$feDir\node_modules\.bin\next.cmd" -ArgumentList "dev --host 0.0.0.0 --port 3000" -WorkingDirectory $feDir -RedirectStandardOutput $feLog -RedirectStandardError $feErr -WindowStyle Hidden
+Start-Process -PassThru -FilePath "$feDir\node_modules\.bin\next.cmd" -ArgumentList "dev -H 0.0.0.0 -p 3000" -WorkingDirectory $feDir -RedirectStandardOutput $feLog -RedirectStandardError $feErr -WindowStyle Hidden
 Start-Sleep -Seconds 3
 Write-Log "Frontend iniciado"
 
@@ -62,6 +62,46 @@ if ($tunnelExists -and -not $NoTunnel -and (Test-Path "$env:USERPROFILE\.cloudfl
     Write-Log "Tunnel iniciado: https://${domain}"
 } elseif ($tunnelExists) {
     Write-Log "Tunnel configurado pero sin login. Salta 'npm run infra:tunnel:login' para activar"
+}
+
+# ─── LocalTunnel (invisible, sin ventanas) ───
+if (-not ($tunnelExists -and (Test-Path "$env:USERPROFILE\.cloudflared\cert.pem"))) {
+    Write-Log "Cloudflare Tunnel no disponible. Iniciando LocalTunnel (invisible)..."
+    $ltUrlFile = "$logDir\tunnel-url.txt"
+    $ltOutFile = "$logDir\localtunnel-raw.log"
+    $ltScript = @"
+`$npx = "C:\Program Files\nodejs\npx.cmd"
+`$outFile = "$ltOutFile"
+`$urlFile = "$ltUrlFile"
+`$logDir = "$logDir"
+while (`$true) {
+    `$ts = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+    "`$ts - Iniciando LocalTunnel..." | Out-File `$outFile -Append -Encoding UTF8
+    try {
+        `$output = & `$npx localtunnel --port 3000 2>&1
+        `$output | Out-File `$outFile -Append -Encoding UTF8
+        `$url = (`$output | Select-String "your url is:" -ErrorAction SilentlyContinue).ToString()
+        if (`$url) {
+            `$url = `$url -replace "your url is: ", ""
+            `$url = `$url.Trim()
+            "`$ts - TUNNEL URL: `$url" | Out-File `$urlFile -Encoding UTF8
+            "`$ts - TUNNEL URL: `$url" | Out-File `$outFile -Append -Encoding UTF8
+        }
+    } catch {
+        "`$ts - ERROR: `$_" | Out-File `$outFile -Append -Encoding UTF8
+    }
+    Start-Sleep -Seconds 15
+}
+"@
+    $ltScriptFile = "$logDir\localtunnel-run.ps1"
+    $ltScript | Set-Content -Path $ltScriptFile -Encoding UTF8
+    Start-Process -PassThru -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$ltScriptFile`"" -WindowStyle Hidden
+    Start-Sleep -Seconds 5
+    if (Test-Path $ltUrlFile) {
+        $savedUrl = Get-Content $ltUrlFile -Raw -ErrorAction SilentlyContinue
+        if ($savedUrl) { Write-Log "TUNNEL PUBLICO: $savedUrl" }
+    }
+    Write-Log "LocalTunnel: ejecutandose en segundo plano (sin ventanas)"
 }
 
 # ─── Auto-deploy monitor ───
@@ -114,6 +154,12 @@ foreach ($ip in $lanIPs) {
 }
 if ($tunnelExists -and (Test-Path "$env:USERPROFILE\.cloudflared\cert.pem")) {
     Write-Log "  INTERNET: https://${domain}"
+} else {
+    $ltUrlFile = "$logDir\tunnel-url.txt"
+    if (Test-Path $ltUrlFile) {
+        $savedUrl = Get-Content $ltUrlFile -Raw -ErrorAction SilentlyContinue
+        if ($savedUrl) { Write-Log "  INTERNET: $savedUrl" }
+    }
 }
 Write-Log "=================================="
 Write-Log "Logs en: $logDir"

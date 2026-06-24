@@ -37,6 +37,7 @@ app = FastAPI(
     title=settings.APP_NAME,
     version="1.0.0",
     lifespan=lifespan,
+    redirect_slashes=False,
 )
 
 if settings.ENVIRONMENT == "production":

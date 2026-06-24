@@ -24,7 +24,14 @@ backend/.env
 frontend/.env.local
 .env
 
-# Infrastructure (generated)
+# Downloaded installers
+data/*.exe
+data/*.msi
+
+# Tunnel binaries
+cloudflared.exe
+
+# Generated tunnel scripts
 scripts/infra/.env
 scripts/infra/config.local.json
 scripts/infra/*.log

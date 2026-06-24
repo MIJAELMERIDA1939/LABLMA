@@ -46,7 +46,7 @@ async def _registrar_historial(
     db.add(historial)
 
 
-@router.get("/", response_model=PaginatedResponse)
+@router.get("", response_model=PaginatedResponse)
 async def list_documentos(
     tipo: str = None,
     iso_norma: str = None,

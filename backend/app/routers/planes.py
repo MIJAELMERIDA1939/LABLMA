@@ -27,7 +27,7 @@ class PlanPaginatedResponse(BaseModel):
 router = APIRouter(prefix="/planes", tags=["planes"])
 
 
-@router.get("/", response_model=PlanPaginatedResponse)
+@router.get("", response_model=PlanPaginatedResponse)
 async def list_planes(
     estado: str = None,
     iso_norma: str = None,
@@ -61,7 +61,7 @@ async def list_planes(
     return PlanPaginatedResponse(items=planes, total=total, limit=limit, offset=offset)
 
 
-@router.post("/", response_model=PlanOut, status_code=201)
+@router.post("", response_model=PlanOut, status_code=201)
 async def create_plan(
     body: PlanCreate,
     db: AsyncSession = Depends(get_db),

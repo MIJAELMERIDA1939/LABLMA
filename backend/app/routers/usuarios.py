@@ -25,7 +25,7 @@ class UsuarioPaginatedResponse(BaseModel):
 router = APIRouter(prefix="/usuarios", tags=["usuarios"])
 
 
-@router.get("/", response_model=UsuarioPaginatedResponse)
+@router.get("", response_model=UsuarioPaginatedResponse)
 async def list_usuarios(
     search: str = None,
     rol: str = None,
@@ -55,7 +55,7 @@ async def list_usuarios(
     return UsuarioPaginatedResponse(items=items, total=total, limit=limit, offset=offset)
 
 
-@router.post("/", response_model=UsuarioOut, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=UsuarioOut, status_code=status.HTTP_201_CREATED)
 async def create_usuario(
     body: UsuarioCreate,
     db: AsyncSession = Depends(get_db),

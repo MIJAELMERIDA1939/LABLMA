@@ -25,7 +25,7 @@ class RiesgoPaginatedResponse(BaseModel):
 router = APIRouter(prefix="/riesgos", tags=["riesgos"])
 
 
-@router.get("/", response_model=RiesgoPaginatedResponse)
+@router.get("", response_model=RiesgoPaginatedResponse)
 async def list_riesgos(
     estado: str = None,
     search: str = None,
@@ -55,7 +55,7 @@ async def list_riesgos(
     return RiesgoPaginatedResponse(items=items, total=total, limit=limit, offset=offset)
 
 
-@router.post("/", response_model=RiesgoOut, status_code=201)
+@router.post("", response_model=RiesgoOut, status_code=201)
 async def create_riesgo(
     body: RiesgoCreate,
     db: AsyncSession = Depends(get_db),

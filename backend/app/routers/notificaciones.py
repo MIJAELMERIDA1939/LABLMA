@@ -17,7 +17,7 @@ from app.auth.dependencies import get_current_user
 router = APIRouter(prefix="/notificaciones", tags=["notificaciones"])
 
 
-@router.get("/", response_model=list[NotificacionOut])
+@router.get("", response_model=list[NotificacionOut])
 async def list_notificaciones(
     leida: bool = False,
     db: AsyncSession = Depends(get_db),
